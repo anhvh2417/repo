@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài tập dự án cá nhân: Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0f1a;
+      --bg2: #111827;
+      --card: #161d2e;
+      --border: #1e2d45;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --accent3: #34d399;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --heading-font: 'Be Vietnam Pro', sans-serif;
+      --mono: 'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--heading-font);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 2rem; height: 64px;
+      background: rgba(11,15,26,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a {
+      text-decoration: none; color: var(--muted);
+      font-size: .9rem; font-weight: 500; letter-spacing: .04em;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 2rem 2rem;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 30%, rgba(56,189,248,.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(129,140,248,.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 760px; }
+    .hero-badge {
+      display: inline-block; margin-bottom: 1.5rem;
+      padding: .35rem 1rem; border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.35);
+      background: rgba(56,189,248,.08);
+      font-size: .8rem; color: var(--accent); letter-spacing: .08em; text-transform: uppercase;
+    }
+    .hero-inner h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800; line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+    .hero-inner h1 span { color: var(--accent); }
+    .hero-inner .subtitle {
+      margin-top: .8rem; font-size: 1.1rem; color: var(--muted);
+    }
+
+    /* student info card */
+    .info-card {
+      margin: 2rem auto 0;
+      max-width: 480px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.75rem;
+      text-align: left;
+    }
+    .info-card table { width: 100%; border-collapse: collapse; }
+    .info-card td {
+      padding: .35rem 0;
+      font-size: .9rem;
+    }
+    .info-card td:first-child {
+      color: var(--muted); font-weight: 500; width: 50%;
+    }
+    .info-card td:last-child { color: var(--text); font-weight: 600; }
+
+    .hero-btns {
+      margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .7rem 1.6rem; border-radius: 8px;
+      font-size: .9rem; font-weight: 600; text-decoration: none; transition: all .2s;
+    }
+    .btn-primary {
+      background: var(--accent); color: #0b0f1a;
+    }
+    .btn-primary:hover { background: #7dd3fc; }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-title {
+      font-size: 2rem; font-weight: 800; margin-bottom: .5rem;
+    }
+    .section-title span { color: var(--accent); }
+    .section-subtitle { color: var(--muted); margin-bottom: 3rem; font-size: .95rem; }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;
+    }
+    @media(max-width:700px){ .about-grid { grid-template-columns: 1fr; } }
+    .about-text p { color: #94a3b8; margin-bottom: 1rem; }
+    .about-text strong { color: var(--text); }
+
+    .stats-row {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.5rem;
+    }
+    .stat-box {
+      flex: 1; min-width: 100px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.25rem; text-align: center;
+    }
+    .stat-box .num {
+      font-size: 2rem; font-weight: 800; color: var(--accent);
+      font-family: var(--mono);
+    }
+    .stat-box .lbl { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+
+    /* timeline */
+    .timeline { position: relative; padding-left: 1.5rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .tl-item { position: relative; margin-bottom: 1.5rem; }
+    .tl-item::before {
+      content: ''; position: absolute; left: -1.9rem; top: .4rem;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg2);
+    }
+    .tl-item h4 { font-size: .95rem; font-weight: 700; color: var(--text); }
+    .tl-item p { font-size: .85rem; color: var(--muted); margin-top: .2rem; }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--bg2); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+    .project-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .project-card .week-badge {
+      display: inline-block; margin-bottom: .75rem;
+      padding: .2rem .7rem; border-radius: 6px;
+      font-size: .75rem; font-family: var(--mono);
+      background: rgba(56,189,248,.1); color: var(--accent);
+      border: 1px solid rgba(56,189,248,.25);
+    }
+    .project-card .icon { font-size: 1.8rem; margin-bottom: .75rem; }
+    .project-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .project-card p { font-size: .85rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1rem; }
+    .tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .tag {
+      font-size: .72rem; padding: .2rem .55rem; border-radius: 4px;
+      background: rgba(129,140,248,.1); color: var(--accent2);
+      border: 1px solid rgba(129,140,248,.2);
+    }
+
+    /* portfolio card highlight */
+    .project-card.highlight {
+      border-color: rgba(52,211,153,.35);
+      background: linear-gradient(135deg, var(--card), rgba(52,211,153,.04));
+    }
+    .project-card.highlight:hover { border-color: var(--accent3); }
+    .project-card.highlight .week-badge {
+      background: rgba(52,211,153,.1); color: var(--accent3);
+      border-color: rgba(52,211,153,.25);
+    }
+    .project-card.highlight .tag {
+      background: rgba(52,211,153,.1); color: var(--accent3);
+      border-color: rgba(52,211,153,.2);
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--bg); }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem;
+    }
+    .skill-block {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .skill-block h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+    .skill-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .skill-pill {
+      font-size: .8rem; padding: .3rem .8rem; border-radius: 6px;
+      background: rgba(56,189,248,.07); color: #94a3b8;
+      border: 1px solid var(--border); transition: all .2s;
+    }
+    .skill-pill:hover { color: var(--accent); border-color: rgba(56,189,248,.4); }
+
+    /* ── FILES ── */
+    #files { background: var(--bg2); }
+    .files-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;
+    }
+    .file-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      display: flex; flex-direction: column; gap: .75rem;
+      transition: border-color .2s;
+    }
+    .file-card:hover { border-color: var(--accent); }
+    .file-icon { font-size: 2rem; }
+    .file-card h3 { font-size: .95rem; font-weight: 700; }
+    .file-card p { font-size: .83rem; color: var(--muted); flex: 1; }
+    .file-card a.btn { align-self: flex-start; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2.5rem 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: .85rem;
+    }
+    footer strong { color: var(--text); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#about">Về tôi</a></li>
+    <li><a href="#projects">Dự án</a></li>
+    <li><a href="#skills">Kỹ năng</a></li>
+    <li><a href="#files">Tài liệu</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner reveal">
+    <h1>Bài tập dự án cá nhân: <span>Portfolio</span></h1>
+    <div class="info-card">
+      <table>
+        <tr>
+          <td>Họ và tên</td>
+          <td>Vũ Hoàng Anh</td>
+        </tr>
+        <tr>
+          <td>Ngành học</td>
+          <td>Kĩ thuật máy tính</td>
+        </tr>
+        <tr>
+          <td>Mã sinh viên</td>
+          <td>25020468</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#projects">Xem dự án</a>
+      <a class="btn btn-ghost" href="#files">Tài liệu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-title reveal">Về <span>tôi</span></div>
+    <div class="section-subtitle reveal">Lộ trình học tập 15 tuần</div>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>Tôi đã hoàn thành một chương trình học tập toàn diện về <strong>Công nghệ số &amp; Trí tuệ nhân tạo</strong>, bao gồm các kỹ năng thiết yếu từ quản lý file cơ bản đến ứng dụng AI nâng cao.</p>
+        <p>Qua 15 tuần này, tôi đã phát triển khả năng <strong>sáng tạo, critical thinking, và tư duy đạo đức</strong> khi làm việc với AI.</p>
+        <p>Mục tiêu của tôi là sử dụng AI như một công cụ <strong>hỗ trợ &amp; tăng tốc</strong> cho sáng tạo, không phải thay thế tư duy con người.</p>
+
+        <div class="stats-row">
+          <div class="stat-box"><div class="num">15</div><div class="lbl">Tuần học tập</div></div>
+          <div class="stat-box"><div class="num">7</div><div class="lbl">Dự án hoàn thành</div></div>
+          <div class="stat-box"><div class="num">15+</div><div class="lbl">Kỹ năng chinh phục</div></div>
+        </div>
+      </div>
+
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <h4>📁 Tuần 1 – File Management</h4>
+          <p>Quản lý file, folder trên Windows/Linux; CLI cơ bản.</p>
+        </div>
+        <div class="tl-item">
+          <h4>🔍 Tuần 2 – Academic Research</h4>
+          <p>Tìm kiếm & đánh giá tài liệu học thuật từ Google Scholar, IEEE, Springer.</p>
+        </div>
+        <div class="tl-item">
+          <h4>💬 Tuần 3 – Prompt Engineering</h4>
+          <p>Viết prompt hiệu quả cho AI; 3 mức độ từ cơ bản đến nâng cao.</p>
+        </div>
+        <div class="tl-item">
+          <h4>🤝 Tuần 4 – Collaboration Tools</h4>
+          <p>Trello, Google Docs, Slack; cộng tác nhóm & self-management.</p>
+        </div>
+        <div class="tl-item">
+          <h4>✨ Tuần 5 – AI Creative Project</h4>
+          <p>Blog chuyên sâu kết hợp Gemini, DALL-E 3, Canva.</p>
+        </div>
+        <div class="tl-item">
+          <h4>⚖️ Tuần 6 – Responsible AI</h4>
+          <p>Phân tích chính sách AI; xây dựng nguyên tắc sử dụng AI có đạo đức.</p>
+        </div>
+        <div class="tl-item">
+          <h4>📊 Tuần 7 – AI Research Synthesis</h4>
+          <p>Tổng hợp 5 bài báo khoa học về AI trong phát hiện ung thư.</p>
+        </div>
+        <div class="tl-item">
+          <h4>🌐 Portfolio Website</h4>
+          <p>Tạo portfolio tổng hợp 7 tuần học tập.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-title reveal">Lộ trình <span>dự án</span></div>
+    <div class="section-subtitle reveal">7 dự án từ 15 tuần học tập</div>
+
+    <div class="projects-grid">
+      <!-- Week 1 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 1</div>
+        <div class="icon">📁</div>
+        <h3>File Management</h3>
+        <p>Nắm vững kỹ năng quản lý file, folder trên Windows/Linux. Thực hành tạo, sao chép, di chuyển, xóa file một cách khoa học.</p>
+        <div class="tags"><span class="tag">CLI</span><span class="tag">OS</span></div>
+      </div>
+      <!-- Week 2 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 2</div>
+        <div class="icon">🔍</div>
+        <h3>Academic Research</h3>
+        <p>Tìm kiếm & đánh giá thông tin học thuật từ Google Scholar, IEEE, Springer. Tổng hợp 10 tài liệu với phân tích độ tin cậy.</p>
+        <div class="tags"><span class="tag">Research</span><span class="tag">Critical Thinking</span></div>
+      </div>
+      <!-- Week 3 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 3</div>
+        <div class="icon">💬</div>
+        <h3>Prompt Engineering</h3>
+        <p>Học viết prompt hiệu quả cho AI. So sánh 3 mức độ: cơ bản → cải tiến → nâng cao. Rút ra nguyên tắc prompt engineering.</p>
+        <div class="tags"><span class="tag">AI</span><span class="tag">Communication</span></div>
+      </div>
+      <!-- Week 4 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 4</div>
+        <div class="icon">🤝</div>
+        <h3>Collaboration Tools</h3>
+        <p>Thành thạo Trello, Google Docs, Google Drive, Slack. Minh chứng cộng tác nhóm & self-management trong dự án 5 người.</p>
+        <div class="tags"><span class="tag">Teamwork</span><span class="tag">Tools</span></div>
+      </div>
+      <!-- Week 5 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 5</div>
+        <div class="icon">✨</div>
+        <h3>AI Creative Project</h3>
+        <p>Tạo bài blog chuyên sâu kết hợp Gemini (text), DALL-E 3 (ảnh), Canva (design). Phân tích quy trình sáng tạo augmented by AI.</p>
+        <div class="tags"><span class="tag">Gemini</span><span class="tag">DALL-E</span><span class="tag">Design</span></div>
+      </div>
+      <!-- Week 6 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 6</div>
+        <div class="icon">⚖️</div>
+        <h3>Responsible AI</h3>
+        <p>Phân tích chính sách AI của trường. Xây dựng bộ nguyên tắc cá nhân về sử dụng AI có đạo đức trong học thuật.</p>
+        <div class="tags"><span class="tag">Ethics</span><span class="tag">Policy</span></div>
+      </div>
+      <!-- Week 7 -->
+      <div class="project-card reveal">
+        <div class="week-badge">Tuần 7</div>
+        <div class="icon">📊</div>
+        <h3>AI Research Synthesis</h3>
+        <p>Tổng hợp 5 bài báo khoa học về AI trong phát hiện ung thư. So sánh phương pháp, độ chính xác, thách thức thực tiễn.</p>
+        <div class="tags"><span class="tag">Research</span><span class="tag">ML/DL</span></div>
+      </div>
+      <!-- Portfolio -->
+      <div class="project-card highlight reveal">
+        <div class="week-badge">Portfolio</div>
+        <div class="icon">🌐</div>
+        <h3>Portfolio Website</h3>
+        <p>Tạo portfolio tổng hợp 7 tuần học tập. Showcase không chỉ kỹ năng kỹ thuật mà cả kỹ năng mềm: tư duy, đạo đức, sáng tạo.</p>
+        <div class="tags"><span class="tag">Web</span><span class="tag">Portfolio</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-title reveal">Kỹ <span>năng</span></div>
+    <div class="section-subtitle reveal">Các kỹ năng tích lũy qua 15 tuần</div>
+
+    <div class="skills-grid">
+      <div class="skill-block reveal">
+        <h3>🤖 AI & Machine Learning</h3>
+        <div class="skill-list">
+          <span class="skill-pill">Google Gemini</span>
+          <span class="skill-pill">ChatGPT / Claude</span>
+          <span class="skill-pill">DALL-E 3</span>
+          <span class="skill-pill">Prompt Engineering</span>
+          <span class="skill-pill">AI Ethics</span>
+          <span class="skill-pill">Research Synthesis</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <h3>💻 Công nghệ & Tools</h3>
+        <div class="skill-list">
+          <span class="skill-pill">Trello</span>
+          <span class="skill-pill">Google Docs</span>
+          <span class="skill-pill">Google Drive</span>
+          <span class="skill-pill">Slack</span>
+          <span class="skill-pill">Canva</span>
+          <span class="skill-pill">CLI / Shell</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <h3>🧠 Kỹ năng mềm</h3>
+        <div class="skill-list">
+          <span class="skill-pill">Critical Thinking</span>
+          <span class="skill-pill">Problem Solving</span>
+          <span class="skill-pill">Communication</span>
+          <span class="skill-pill">Teamwork</span>
+          <span class="skill-pill">Research</span>
+          <span class="skill-pill">Ethical Reasoning</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <h3>📚 Lĩnh vực expertise</h3>
+        <div class="skill-list">
+          <span class="skill-pill">AI in Education</span>
+          <span class="skill-pill">Content Creation</span>
+          <span class="skill-pill">Scientific Writing</span>
+          <span class="skill-pill">Project Management</span>
+          <span class="skill-pill">Digital Literacy</span>
+          <span class="skill-pill">Data Analysis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILES -->
+<section id="files">
+  <div class="container">
+    <div class="section-title reveal">Tài liệu <span>&amp; File</span></div>
+    <div class="section-subtitle reveal">Các file báo cáo, CV, và tài liệu từ 15 tuần học tập</div>
+
+    <div class="files-grid">
+      <div class="file-card reveal">
+        <div class="file-icon">📊</div>
+        <h3>Portfolio Report</h3>
+        <p>Báo cáo tổng hợp 15 tuần (7 bài)</p>
+        <a class="btn btn-ghost" href="https://drive.google.com/drive/u/4/folders/1DaEcN8xYECZv-p7yijmmtM4JtCoqJoHu" target="_blank">Xem tài liệu</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <strong>Vũ Hoàng Anh</strong> · Mã SV: 25020468 · Kĩ thuật Máy tính · UET</p>
+  <p style="margin-top:.4rem; font-size:.8rem;">Bài tập dự án cá nhân: Portfolio</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.12 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
